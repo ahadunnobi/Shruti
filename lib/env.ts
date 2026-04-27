@@ -5,7 +5,8 @@ const requiredEnvVars = [
   "NEXTAUTH_SECRET",
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
-  "VOCAL_TONE_API_URL"
+  "VOCAL_TONE_API_URL",
+  "ENCRYPTION_KEY"
 ] as const;
 
 for (const key of requiredEnvVars) {
@@ -27,5 +28,6 @@ export const env = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
   vocalToneApiUrl: process.env.VOCAL_TONE_API_URL ?? "",
   // Optional: set after deploying your fine-tuned Inference Endpoint (Prompt 25)
-  customHfModelUrl: process.env.CUSTOM_HF_MODEL_URL ?? ""
+  customHfModelUrl: process.env.CUSTOM_HF_MODEL_URL ?? "",
+  encryptionKey: process.env.ENCRYPTION_KEY ?? ""
 };
