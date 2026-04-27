@@ -26,9 +26,7 @@ function getScore(scores: EmotionScores, key: string): number {
   return Number(scores[key] ?? 0);
 }
 
-export function mapEmotionScoresToCategory(
-  scores: EmotionScores
-): "Depression" | "Anxiety" | "Stress" | "Neutral" {
+export function calculateCategoryScores(scores: EmotionScores) {
   const sadness = getScore(scores, "sadness");
   const fear = getScore(scores, "fear");
   const anger = getScore(scores, "anger");
@@ -40,18 +38,30 @@ export function mapEmotionScoresToCategory(
   const anxietyScore = fear * 0.65 + sadness * 0.2 + neutral * 0.15;
   const stressScore = anger * 0.6 + fear * 0.3 + sadness * 0.1;
 
-  const categoryScores = {
+  return {
     Depression: depressionScore,
     Anxiety: anxietyScore,
-    Stress: stressScore
+    Stress: stressScore,
+    Joy: joy,
+    Neutral: neutral
   } as const;
+}
+
+export function mapEmotionScoresToCategory(
+  scores: EmotionScores
+): "Depression" | "Anxiety" | "Stress" | "Neutral" {
+  const categoryScores = calculateCategoryScores(scores);
 
   const topCategory = Object.entries(categoryScores).sort((a, b) => b[1] - a[1])[0];
   const [name, score] = topCategory;
 
-  if (score < 0.35 || joy > 0.5) {
+  if (score < 0.35 || categoryScores.Joy > 0.5) {
     return "Neutral";
   }
 
-  return name as "Depression" | "Anxiety" | "Stress";
+  if (name === "Joy" || name === "Neutral") {
+    return "Neutral";
+  }
+
+  return name as "Depression" | "Anxiety" | "Stress" | "Neutral";
 }

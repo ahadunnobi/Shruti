@@ -18,6 +18,7 @@ model User {
   sessions        Session[]
   analysisResults AnalysisResult[]
   voiceEntries    VoiceEntry[]
+  lifestyleEntries LifestyleEntry[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -84,4 +85,16 @@ model VoiceEntry {
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("voice_entries")
+}
+
+model LifestyleEntry {
+  id                 String   @id @default(cuid())
+  userId             String
+  sleepHours         Float
+  physicalActivity   Int
+  socialInteractions Int
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lifestyle_entries")
 }
