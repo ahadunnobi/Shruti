@@ -20,6 +20,8 @@ model User {
   voiceEntries    VoiceEntry[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+
+  @@map("users")
 }
 
 model Session {
@@ -28,6 +30,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model Account {
@@ -46,6 +50,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model VerificationToken {
@@ -54,6 +59,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 model AnalysisResult {
@@ -64,6 +70,8 @@ model AnalysisResult {
   category      String
   createdAt     DateTime @default(now())
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("analysis_results")
 }
 
 model VoiceEntry {
@@ -74,4 +82,6 @@ model VoiceEntry {
   vocalStressScore Float?
   createdAt       DateTime @default(now())
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("voice_entries")
 }
