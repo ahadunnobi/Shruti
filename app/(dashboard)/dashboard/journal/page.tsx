@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ResultCard } from "@/components/analysis/result-card";
 
 const DRAFT_KEY = "journal-draft-text";
+const CONSENT_GRANTED_KEY = "mh-consent-granted";
 
 type AnalyzeResponse = {
   crisis: boolean;
-  category?: string;
+  category?: "Depression" | "Anxiety" | "Stress" | "Neutral";
   emotionScores?: Record<string, number>;
   matchedKeywords?: string[];
   message?: string;
@@ -46,6 +48,10 @@ export default function JournalPage() {
   const handleSubmit = async () => {
     if (!text.trim()) {
       setError("Please write a journal entry first.");
+      return;
+    }
+    if (localStorage.getItem(CONSENT_GRANTED_KEY) !== "true") {
+      setError("Please complete onboarding consent before saving analysis data.");
       return;
     }
 
@@ -112,13 +118,8 @@ export default function JournalPage() {
 
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
 
-      {result && !result.crisis ? (
-        <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4 text-sm dark:border-emerald-900 dark:bg-emerald-950/40">
-          <p className="font-medium">Detected category: {result.category}</p>
-          <pre className="mt-2 overflow-auto rounded bg-white p-3 text-xs dark:bg-slate-900">
-            {JSON.stringify(result.emotionScores, null, 2)}
-          </pre>
-        </div>
+      {result && !result.crisis && result.category && result.emotionScores ? (
+        <ResultCard category={result.category} emotionScores={result.emotionScores} />
       ) : null}
 
       {result?.crisis ? (

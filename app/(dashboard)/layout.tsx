@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/layout/sidebar";
 import { TopNav } from "@/components/layout/top-nav";
+import { OnboardingModal } from "@/components/onboarding/onboarding-modal";
 import type { ReactNode } from "react";
 
 export default function DashboardLayout({
@@ -9,6 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <OnboardingModal />
       <Sidebar />
       <div className="md:ml-64">
         <TopNav />
