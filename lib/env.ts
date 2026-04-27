@@ -4,7 +4,8 @@ const requiredEnvVars = [
   "DATABASE_URL",
   "NEXTAUTH_SECRET",
   "GOOGLE_CLIENT_ID",
-  "GOOGLE_CLIENT_SECRET"
+  "GOOGLE_CLIENT_SECRET",
+  "VOCAL_TONE_API_URL"
 ] as const;
 
 for (const key of requiredEnvVars) {
@@ -23,5 +24,6 @@ export const env = {
   databaseUrl: process.env.DATABASE_URL ?? "",
   nextAuthSecret: process.env.NEXTAUTH_SECRET ?? "",
   googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+  vocalToneApiUrl: process.env.VOCAL_TONE_API_URL ?? ""
 };
