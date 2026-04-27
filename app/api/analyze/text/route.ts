@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { detectCrisis, mapEmotionScoresToCategory } from "@/lib/analysis";
 import { env } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
+import { encrypt } from "@/lib/encryption";
 
 // ── Model URL resolution ──────────────────────────────────────────────────────
 // Priority:  CUSTOM_HF_MODEL_URL  (fine-tuned Inference Endpoint, Prompt 25)
@@ -143,11 +144,11 @@ export async function POST(request: Request) {
       category      = mapEmotionScoresToCategory(emotionScores);
     }
 
-    // ── Persist to database ──────────────────────────────────────────────────
+    // ── Persist to database (inputText encrypted with AES-256-GCM) ───────────
     const saved = await prisma.analysisResult.create({
       data: {
         userId: session.user.id,
-        inputText,
+        inputText: encrypt(inputText),   // Prompt 26: stored encrypted
         emotionScores,
         category
       }
