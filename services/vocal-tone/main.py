@@ -2,7 +2,6 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import librosa
-import soundfile as sf
 import tempfile
 import os
 
@@ -64,14 +63,7 @@ async def analyze_tone(file: UploadFile = File(...)):
         temp_path = temp_file.name
 
     try:
-        # Convert unsupported encodings to wav when possible.
-        if suffix.lower() not in {".wav", ".flac", ".ogg"}:
-            data, sr = sf.read(temp_path)
-            wav_path = temp_path + ".wav"
-            sf.write(wav_path, data, sr)
-            os.unlink(temp_path)
-            temp_path = wav_path
-
+        # Keep original container (including webm) and rely on librosa/audioread decoding.
         return analyze_audio(temp_path)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))

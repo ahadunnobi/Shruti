@@ -43,17 +43,31 @@ export async function POST(request: Request) {
 
     let vocalStressScore: number | null = null;
     if (env.vocalToneApiUrl) {
-      const toneForm = new FormData();
-      toneForm.append("file", audioFile, audioFile.name || "voice.webm");
-      const toneResponse = await fetch(env.vocalToneApiUrl, {
-        method: "POST",
-        body: toneForm
-      });
+      try {
+        const toneForm = new FormData();
+        toneForm.append("file", audioFile, audioFile.name || "voice.webm");
+        const toneResponse = await fetch(env.vocalToneApiUrl, {
+          method: "POST",
+          body: toneForm
+        });
 
-      if (toneResponse.ok) {
-        const tonePayload = (await toneResponse.json()) as { stress_score?: number };
-        if (typeof tonePayload.stress_score === "number") {
-          vocalStressScore = tonePayload.stress_score;
+        if (toneResponse.ok) {
+          const tonePayload = (await toneResponse.json()) as { stress_score?: number };
+          if (typeof tonePayload.stress_score === "number") {
+            vocalStressScore = tonePayload.stress_score;
+          }
+        } else if (process.env.NODE_ENV !== "production") {
+          // eslint-disable-next-line no-console
+          console.warn("Tone service returned non-OK status", toneResponse.status);
+        }
+      } catch (toneError) {
+        // Graceful degradation: continue with transcript-only flow if tone service fails.
+        if (process.env.NODE_ENV !== "production") {
+          // eslint-disable-next-line no-console
+          console.warn(
+            "Tone service unavailable, continuing without vocal stress score",
+            toneError
+          );
         }
       }
     }
