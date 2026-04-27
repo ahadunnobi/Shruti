@@ -1,18 +1,28 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { MentalHealthScoreCard } from "@/components/dashboard/mental-health-score-card";
 import { LifestyleForm } from "@/components/dashboard/lifestyle-form";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getRollingAverages } from "@/lib/dashboard-metrics";
 
+/**
+ * Prompt 28 — Dashboard page translated with next-intl.
+ *
+ * All user-facing strings come from messages/en.json (or bn.json).
+ * Swap languages via the <LanguageSwitcher /> in the TopNav.
+ */
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     redirect("/auth/signin");
   }
 
-  const now = new Date();
+  // Load translations for the "dashboard" namespace
+  const t = await getTranslations("dashboard");
+
+  const now          = new Date();
   const currentStart = new Date(now);
   currentStart.setDate(now.getDate() - 6);
   currentStart.setHours(0, 0, 0, 0);
@@ -40,23 +50,27 @@ export default async function DashboardPage() {
     })
   ]);
 
-  const currentAvg = getRollingAverages(currentWeek);
+  const currentAvg  = getRollingAverages(currentWeek);
   const previousAvg = getRollingAverages(previousWeek);
 
   return (
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {/* ── Latest analysis card ── */}
       <article className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-        <h3 className="text-sm font-semibold">Latest analysis</h3>
+        <h3 className="text-sm font-semibold">{t("latestAnalysis")}</h3>
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
           {latest
-            ? `Most recent category: ${latest.category} (${new Date(latest.createdAt).toLocaleString()})`
-            : "No analysis yet. Submit your first journal entry."}
+            ? t("mostRecent", {
+                category: latest.category,
+                time: new Date(latest.createdAt).toLocaleString()
+              })
+            : t("noAnalysis")}
         </p>
       </article>
 
       <MentalHealthScoreCard current={currentAvg} previous={previousAvg} />
 
-      <LifestyleForm initialTip="Add lifestyle factors to generate a weekly correlation tip." />
+      <LifestyleForm initialTip={t("disclaimer")} />
     </section>
   );
 }

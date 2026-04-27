@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "title": "Shruti — Mental Health Analysis",
+    "description": "AI-powered mental health journaling and analysis platform."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "journal": "Journal",
+    "history": "History",
+    "voice": "Voice",
+    "settings": "Settings",
+    "privacy": "Privacy"
+  },
+  "dashboard": {
+    "title": "Your Dashboard",
+    "welcome": "Welcome back, {name}",
+    "latestAnalysis": "Latest Analysis",
+    "noAnalysis": "No analysis yet. Submit your first journal entry.",
+    "mostRecent": "Most recent category: {category} ({time})",
+    "disclaimer": "This is not a medical diagnosis. Please consult a professional."
+  },
+  "privacy": {
+    "title": "Privacy Settings",
+    "subtitle": "Manage how your data is stored and what you share with Shruti.",
+    "voiceTitle": "Voice Recordings",
+    "voiceDesc": "When enabled, audio files from your voice sessions are retained.",
+    "exportTitle": "Export Your Data",
+    "exportDesc": "Download a full copy of your data as a JSON file.",
+    "exportBtn": "Export as JSON",
+    "deleteTitle": "Delete All Data",
+    "deleteDesc": "Permanently delete your account. This action cannot be undone.",
+    "deleteBtn": "Delete all my data",
+    "confirmDelete": "Are you sure? Click again to confirm.",
+    "deleting": "Deleting…",
+    "exporting": "Exporting…"
+  },
+  "analysis": {
+    "categories": {
+      "Depression": "Depression",
+      "Anxiety": "Anxiety",
+      "PTSD": "PTSD",
+      "Stress": "Stress",
+      "Neutral": "Neutral"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading…",
+    "error": "Something went wrong. Please try again.",
+    "success": "Saved successfully."
+  }
+}
