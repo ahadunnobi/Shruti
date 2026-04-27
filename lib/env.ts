@@ -25,5 +25,7 @@ export const env = {
   nextAuthSecret: process.env.NEXTAUTH_SECRET ?? "",
   googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-  vocalToneApiUrl: process.env.VOCAL_TONE_API_URL ?? ""
+  vocalToneApiUrl: process.env.VOCAL_TONE_API_URL ?? "",
+  // Optional: set after deploying your fine-tuned Inference Endpoint (Prompt 25)
+  customHfModelUrl: process.env.CUSTOM_HF_MODEL_URL ?? ""
 };
